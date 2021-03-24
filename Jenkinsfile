@@ -3,10 +3,6 @@ pipeline {
   environment {
     PATH = "/opt/maven/bin:$PATH"
   }
-  triggers {
-    pollSCM '* * * * *'
-  }
-
   stages {
 
     stage('Cloning Project') {
