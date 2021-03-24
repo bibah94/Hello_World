@@ -2,7 +2,6 @@ pipeline {
   agent none
   environment {
     PATH = "/opt/maven/bin:$PATH"
-    scannerHome = tool 'sonar-scanner'
   }
   triggers {
     pollSCM '* * * * *'
