@@ -37,12 +37,12 @@ pipeline {
 	
   post{
     success{
-	slacksend  channel: '#jenkins',
+	slackSend  channel: '#jenkins',
 		   color: 'good',
 		   message: "Build ${env.BUILD_NUMBER}, success: ${currentBuild.fullDisplayName}."
     }
     failure{
-	slacksend  channel: '#jenkins',
+	slackSend  channel: '#jenkins',
 		   color: 'danger',
 		   message: "Build ${env.BUILD_NUMBER}, failed: ${currentBuild.fullDisplayName}."	
     }
