@@ -25,9 +25,7 @@ pipeline {
         sshPublisher(publishers: [sshPublisherDesc(
           configName: 'ansible-server', 
           transfers: [sshTransfer(
-            cleanRemote: false, excludes: '', 
-            execCommand: 'ansible-playbook -i /opt/docker/hosts /opt/docker/devops-docker-image.yml;', 
-            patternSeparator: '[, ]+', 
+            execCommand: 'ansible-playbook -i /opt/docker/hosts /opt/docker/devops-docker-image.yml', 
             remoteDirectory: '//opt//docker', 
             removePrefix: 'webapp/target', 
             sourceFiles: 'webapp/target/*.war')], 
@@ -39,14 +37,14 @@ pipeline {
 	
   post{
     success{
-	slacksend	channel: '#jenkins',
-			color: 'good',
-			message: "Build ${env.BUILD_NUMBER}, success: ${currentBuild.fullDisplayName}."
+	slacksend  channel: '#jenkins',
+		   color: 'good',
+		   message: "Build ${env.BUILD_NUMBER}, success: ${currentBuild.fullDisplayName}."
     }
     failure{
-	slacksend	channel: '#jenkins',
-			color: 'danger',
-			message: "Build ${env.BUILD_NUMBER}, failed: ${currentBuild.fullDisplayName}."	
+	slacksend  channel: '#jenkins',
+		   color: 'danger',
+		   message: "Build ${env.BUILD_NUMBER}, failed: ${currentBuild.fullDisplayName}."	
     }
     always {
       emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
