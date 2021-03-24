@@ -2,20 +2,11 @@ pipeline {
   agent none
   environment {
     PATH = "/opt/maven/bin:$PATH"
-    scannerHome = tool 'sonar-scanner'
   }
-  triggers {
-    pollSCM '* * * * *'
-  }
-
   stages {
 
     stage('Cloning Project') {
       steps {
-        //enable remote triggers
-        script {
-            properties([pipelineTriggers([pollSCM('')])])
-        }
         git(url: 'https://github.com/bibah94/BiB-Devops.git', branch: 'master')
       }
     }
