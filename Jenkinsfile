@@ -1,4 +1,5 @@
 pipeline {
+	
   agent any
   
   environment {
@@ -25,18 +26,11 @@ pipeline {
           configName: 'ansible-server', 
           transfers: [sshTransfer(
             cleanRemote: false, excludes: '', 
-            execCommand: 'ansible-playbook -i /opt/docker/hosts  /opt/docker/devops-docker-image.yml;', 
-            execTimeout: 120000, 
-            flatten: false, 
-            makeEmptyDirs: false, 
-            noDefaultExcludes: false, 
+            execCommand: 'ansible-playbook -i /opt/docker/hosts /opt/docker/devops-docker-image.yml;', 
             patternSeparator: '[, ]+', 
             remoteDirectory: '//opt//docker', 
-            remoteDirectorySDF: false, 
             removePrefix: 'webapp/target', 
             sourceFiles: 'webapp/target/*.war')], 
-            usePromotionTimestamp: false, 
-            useWorkspaceInPromotion: false, 
             verbose: false
         )])
       }
