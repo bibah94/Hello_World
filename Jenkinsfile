@@ -11,7 +11,7 @@ pipeline {
 
     stage('Cloning Project') {
       steps {
-        git(url: 'https://github.com/bibah94/Hello_World.git', branch: 'master')
+        git(url: 'https://github.com/bibah94/Hello_Wworld.git', branch: 'master')
       }
     }
 
@@ -19,7 +19,7 @@ pipeline {
       agent any
       steps {
         withSonarQubeEnv(envOnly: true, installationName: 'sonarqube-server', credentialsId: '4f92fd01-ca54-4b3d-b1fd-c96a30aa2e2a') {
-          sh "mvn clean package sonar:sonar"
+          sh "mvn clean install package sonar:sonar"
         }       
       }
     }
