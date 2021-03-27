@@ -4,27 +4,23 @@ pipeline {
   
   environment {
     PATH = "/opt/maven/bin:$PATH"
-    scannerHome = tool 'sonar-scanner'
   }
   
   stages {
 
     stage('Cloning Project') {
       steps {
-        git(url: 'https://github.com/bibah94/Hello_Wworld.git', branch: 'master')
+        git(url: 'https://github.com/bibah94/BiB-Devops.git', branch: 'master')
       }
     }
 
-    stage('Build & Static Code Analysis') {
-      agent any
+    stage('Build app'){
       steps {
-        withSonarQubeEnv(envOnly: true, installationName: 'sonarqube-server', credentialsId: '4f92fd01-ca54-4b3d-b1fd-c96a30aa2e2a') {
-          sh "mvn clean install package sonar:sonar"
-        }       
+        sh "mvn -Dmaven.test.failure.ignore=true package"
       }
     }
 
-    stage('Build Docker Image, Push to Nexus and Deploy to Kubernetes Cluster'){
+    stage('Build Docker Image, Push to Nexus and Deploy to Docker Container stage'){
       steps {
         sshPublisher(publishers: [sshPublisherDesc(
           configName: 'ansible-server', 
@@ -38,23 +34,3 @@ pipeline {
       }
     }
   }
-	
-  post{
-    success{
-	slackSend  channel: '#jenkins',
-		   color: 'good',
-		   message: "Build ${env.BUILD_NUMBER}, success: ${currentBuild.fullDisplayName}."
-    }
-    failure{
-	slackSend  channel: '#jenkins',
-		   color: 'danger',
-		   message: "Build ${env.BUILD_NUMBER}, failed: ${currentBuild.fullDisplayName}."	
-    }
-    always {
-      emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-           recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
-           to: 'habibndiaye08@gmail.com',
-           subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
-    }
-  }
-}
